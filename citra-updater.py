@@ -16,6 +16,7 @@ import os
 from io import BytesIO
 import pathlib
 from contextlib import contextmanager
+from util.install import install
 
 @contextmanager
 def suppress_stdout():
@@ -26,11 +27,6 @@ def suppress_stdout():
             yield
         finally:
             sys.stdout = old_stdout
-
-def install(package):
-    print(f'Installing [{package}]')
-    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-    print(f'Installed package [{package}].')
 
 # deprecating using "official" PSG due to paywall - will keep code around just in case other bullshit happens
 # try: # check for PySimpleGUI and install if not present
@@ -180,8 +176,7 @@ class Pokemon:
     def species_num(self):
         if len(self.raw_data) > 0:
             return struct.unpack("<H", self.raw_data[0x8:0xA])[0]
-        else:
-            return 0
+        return 0
 
     def getAtts(self,gamegroupid,gen):
         dex = self.species_num()
